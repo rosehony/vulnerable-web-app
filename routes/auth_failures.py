@@ -3,20 +3,31 @@ import hashlib
 
 auth_failures = Blueprint('auth_failures', __name__)
 
+# VULNERABILITY: Hardcoded credentials
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "admin123"
+API_KEY = "1234-5678-9012-3456"
+
 @auth_failures.route('/login', methods=['POST'])
 def login():
-    # Vulnerability: Weak password hashing
     username = request.form.get('username')
     password = request.form.get('password')
     
-    # Vulnerability: SQL Injection in login
-    conn = sqlite3.connect('database.db')
-    c = conn.cursor()
-    query = f"SELECT * FROM users WHERE username='{username}' AND password='{password}'"
-    user = c.execute(query).fetchone()
-    conn.close()
+    # VULNERABILITY: Weak cryptography
+    hashed_password = hashlib.md5(password.encode()).hexdigest()
     
-    if user:
-        session['user'] = username
-        return 'Login successful'
-    return 'Login failed'
+    # VULNERABILITY: Hard-coded comparison
+    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        session['logged_in'] = True
+        return "Login successful"
+    
+    return "Login failed"
+
+@auth_failures.route('/reset_password', methods=['POST'])
+def reset_password():
+    # VULNERABILITY: No rate limiting
+    email = request.form.get('email')
+    # VULNERABILITY: Information disclosure
+    if email in ['admin@example.com', 'user@example.com']:
+        return "Password reset email sent"
+    return "Email not found"

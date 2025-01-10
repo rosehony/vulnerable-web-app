@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Security Misconfiguration{% endblock %}
+
+{% block content %}
+<h2>Security Misconfiguration Examples</h2>
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">Debug Information</h5>
+        <p class="card-text">This endpoint exposes sensitive debug information:</p>
+        <a href="/security-misconfig/debug" class="btn btn-danger">View Debug Info</a>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">Configuration Info</h5>
+        <p class="card-text">This endpoint exposes server configuration:</p>
+        <a href="/security-misconfig/phpinfo" class="btn btn-danger">View Config</a>
+    </div>
+</div>
+</div>
+{% endblock %}

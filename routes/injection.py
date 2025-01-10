@@ -1,23 +1,42 @@
 from flask import Blueprint, request
 import sqlite3
 import subprocess
+import os
 
 injection = Blueprint('injection', __name__)
 
-@injection.route('/search')
+@injection.route('/search', methods=['GET', 'POST'])
 def search():
-    query = request.args.get('q', '')
-    # Vulnerability: SQL Injection
-    conn = sqlite3.connect('database.db')
-    c = conn.cursor()
-    c.execute(f"SELECT * FROM users WHERE username LIKE '%{query}%'")
-    results = c.fetchall()
-    conn.close()
-    return str(results)
+    username = request.args.get('username', '')
+    password = request.args.get('password', '')
+    
+    # VULNERABILITY: Direct SQL injection
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    sql_query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+    cursor.execute(sql_query)  # Direct SQL injection vulnerability
+    
+    # VULNERABILITY: OS Command injection
+    os.system(f"echo {username} >> /tmp/users.txt")  # Command injection
+    
+    # VULNERABILITY: Unsafe deserialization
+    import pickle
+    data = request.args.get('data')
+    pickle.loads(data)  # Unsafe deserialization
 
-@injection.route('/ping')
-def ping():
-    host = request.args.get('host', 'localhost')
-    # Vulnerability: Command Injection
-    result = subprocess.check_output(f"ping -c 1 {host}", shell=True)
-    return result
+    return "Query executed"
+
+@injection.route('/exec')
+def execute_command():
+    # VULNERABILITY: Direct command execution
+    cmd = request.args.get('cmd', 'ls')
+    output = subprocess.check_output(cmd, shell=True)  # Command injection
+    return output
+
+@injection.route('/file')
+def read_file():
+    # VULNERABILITY: Path traversal
+    filename = request.args.get('filename')
+    with open(filename, 'r') as f:  # Path traversal vulnerability
+        content = f.read()
+    return content

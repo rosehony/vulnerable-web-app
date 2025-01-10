@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Injection Vulnerabilities{% endblock %}
+
+{% block content %}
+<h2>SQL Injection Example</h2>
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">User Search</h5>
+        <form action="/injection/search" method="GET">
+            <div class="mb-3">
+                <input type="text" name="q" class="form-control" placeholder="Search users...">
+                <small class="text-muted">Try: ' OR '1'='1</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+</div>
+
+<h2>Command Injection Example</h2>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Ping Host</h5>
+        <form action="/injection/ping" method="GET">
+            <div class="mb-3">
+                <input type="text" name="host" class="form-control" placeholder="Enter hostname...">
+                <small class="text-muted">Try: localhost; ls</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Ping</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
