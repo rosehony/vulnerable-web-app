@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>OWASP Top 10 Vulnerability Examples</h1>
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">A01:2021 – Broken Access Control</h5>
+                <p class="card-text">Examples of broken access control vulnerabilities.</p>
+                <a href="/broken-access" class="btn btn-primary">View Examples</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">A02:2021 – Cryptographic Failures</h5>
+                <p class="card-text">Examples of cryptographic failure vulnerabilities.</p>
+                <a href="/crypto-failures" class="btn btn-primary">View Examples</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">A03:2021 – Injection</h5>
+                <p class="card-text">Examples of injection vulnerabilities.</p>
+                <a href="/injection" class="btn btn-primary">View Examples</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
